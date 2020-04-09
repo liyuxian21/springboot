@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.goods.dao.GoodsDao">
+    <!--新增商品-->
+    <insert id="addGoods" parameterType="com.goods.entity.GoodsInfo">
+        insert into t_sys_product
+        (product_id,
+         product_code,
+         product_name,
+         product_image,
+         press,
+         author,
+         price,
+         stock,
+         price_now,
+         book_number,
+         product_idc,
+         message,
+         class_id,
+         product_status,
+         class_first_id,
+         class_first_name,
+         class_second_id,
+         class_second_name,
+         is_deleted,
+         create_people,
+         create_time,
+         update_people,
+         update_time,
+         version)
+        values
+           (#{goodsId},
+            #{goodsCode},
+            #{goodsName},
+            #{photoUrl},
+            #{press},
+            #{author},
+            #{costPrice},
+            #{store},
+            #{inPrice},
+            #{bookNumber},
+            #{goodsIntroduction},
+            #{adWords},
+            #{classId},
+            1,
+            #{classFirstId},
+            #{classFirstName},
+            #{classSecondId},
+            #{classSecondName},
+            0,
+            #{createBy},
+            now(),
+            #{lastModifiedBy},
+            now(),
+            0)
+     </insert>
+    <!--修改商品-->
+    <update id="updateGoodsById" parameterType="com.goods.entity.GoodsInfo">
+    update t_sys_product
+    set
+        product_name   = #{goodsName},
+        class_first_id =#{classFirstId},
+        class_second_id=#{classSecondId},
+        product_image  = #{photoUrl},
+        press          = #{press},
+        author         = #{author},
+        price          = #{costPrice},
+        stock          = #{store},
+        price_now      = #{inPrice},
+        book_number    = #{bookNumber},
+        product_idc    = #{goodsIntroduction},
+        message        = #{adWords},
+        update_people  = #{lastModifiedBy},
+        update_time    = now(),
+        version        = version+1
+    where product_id  = #{goodsId}
+        and version   = #{version}
+   </update>
+
+    <!--删除商品-->
+    <delete id="deleteGoods" parameterType="com.goods.entity.GoodsInfo">
+        update t_sys_product
+        set
+            is_deleted = 1,
+            update_time = now(),
+            update_people =#{userId},
+            version = version+1
+        where product_id in
+        <foreach item="item" index="index" collection="listId" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </delete>
+
+    <!--获取商品详情-->
+    <select id="findGoodsById" parameterType="java.lang.String" resultType="com.goods.entity.GoodsDetail">
+        select
+           product_name  goodsName,
+           class_first_name     classFirstName,
+           class_second_name    classSecondName,
+           book_number   bookNumber,
+           message       adWords,
+           product_image  photoUrl,
+           press          press,
+           author         author,
+           price          costPrice,
+           stock          store,
+           price_now      inPrice,
+           product_idc    goodsIntroduction
+        from t_sys_product
+        where product_id=#{goodsId}
+        and is_deleted=0
+    </select>
+    <!--商品列表-->
+    <select id="listGoodsByPage" parameterType="com.goods.entity.GoodsList" resultType="com.goods.entity.GoodsList">
+        select
+            a.product_id goodsId,
+            a.class_first_id classFirstId,
+            a.class_second_id classSecondId,
+            a.product_name goodsName,
+            a.message adWords,
+            a.press press,
+            a.author author,
+            a.product_status goodsStatus,
+            update_time      upTime,
+            a.version version
+        from t_sys_product a
+        where a.is_deleted=0
+        <if test="goodsName != null and goodsName != ''">
+        and a.product_name like concat('%', #{goodsName}, '%')
+        </if>
+        <if test="press != null and press != ''">
+            and a.press like concat('%', #{press}, '%')
+        </if>
+        <if test="goodsStatus != null and goodsStatus != ''">
+            and a.product_status like concat('%', #{goodsStatus}, '%')
+        </if>
+        <if test="author!= null and author!= ''">
+            and a.author like concat('%', #{author}, '%')
+        </if>
+        <if test="adWords != null and adWords != ''">
+            and a.message like concat('%', #{adWords}, '%')
+        </if>
+        order by update_time desc
+    </select>
+
+    <!--修改商品状态 0 下架 1 上架-->
+    <update id="status" parameterType="java.lang.String">
+    update t_sys_product
+    set
+        product_status = #{orederStatus},
+        update_time    = now(),
+        update_people  = #{userId},
+        version        = version+1
+    where
+        product_id  in
+     <foreach item="item" index="index" collection="listId1" open="(" separator="," close=")">
+        #{item}
+     </foreach>
+   </update>
+
+    <!--商品一级分类列表-->
+    <select id="firstClassGoodsList" parameterType="com.goods.entity.GoodsClass" resultType="com.goods.entity.GoodsClass">
+        select
+        a.class_id classId,
+        a.class_name className,
+        a.version version
+        from t_sys_product_class a
+        where a.is_deleted=0
+        and  a.is_parent=0
+    </select>
+
+    <!--商品二级分类列表-->
+    <select id="secondClassGoodsList" parameterType="com.goods.entity.GoodsClass" resultType="com.goods.entity.GoodsClass">
+        select
+        a.class_id classId,
+        a.class_name className,
+        a.version version        from t_sys_product_class a
+        where a.is_deleted=0
+        and  a.is_parent=1
+    </select>
+
+</mapper>
