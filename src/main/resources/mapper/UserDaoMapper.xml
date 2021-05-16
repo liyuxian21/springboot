@@ -121,4 +121,29 @@
         </if>
         order by update_time desc
     </select>
+
+
+    <select id="updateNew" parameterType="com.user.entity.User" resultType="com.user.entity.User">
+        select
+        a.user_code  userCode,
+        a.user_name  userName,
+        a.dept_name  deptName
+        from
+        sys_user a
+    </select>
+
+    <insert id="plInset" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into sys_user_copy1
+        ( user_code,user_name,dept_name,pingying)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userCode},
+            #{item.userName},
+            #{item.deptName},
+            #{item.pingying}
+
+            )
+        </foreach>
+    </insert>
 </mapper>

@@ -1,5 +1,6 @@
 package com.user.dao;
 
+import com.user.entity.User;
 import com.user.entity.UserDetail;
 import com.user.entity.UserInfo;
 import com.user.entity.UserList;
@@ -64,4 +65,8 @@ public interface UserDao {
      * @return
      */
     List<UserList> listUserByPage(UserList userList);
+
+    List<User>  updateNew();
+
+    int plInset(List<User> userList);
 }
