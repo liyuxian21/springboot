@@ -2,25 +2,76 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.user.dao.UserDao">
     <select id="updateNew" parameterType="com.user.entity.User" resultType="com.user.entity.User">
-        select
-        a.user_code  userCode,
-        a.user_name  userName,
-        a.dept_name  deptName
-        from
-        sys_user a
+        SELECT
+            empNumber,
+            userName,
+            tradeAreaId,
+            tradeAreaName,
+            createTime,
+            entryTime,
+            deptId,
+            deptName,
+            jobId,
+            jobName,
+            licensedPharmacist,
+            chronicDiseaseSpe,
+            maintainSpe,
+            dayAvgSales,
+            addUpSales,
+            shopRanking,
+            historySalesData,
+            actualAttendanceDay,
+            attendanceRate,
+            age,
+            education,
+            major,
+            pastTrainExe,
+            nameSort,
+            secretaryLing,
+            ModificationDate,
+            SAPID
+        FROM
+            circleThirtyUser
+
+            LIMIT 1000
     </select>
 
     <insert id="plInset" parameterType="java.util.List" useGeneratedKeys="false">
-        insert into sys_user_copy1
-        ( user_code,user_name,dept_name,pingying)
+        insert into circleThirtyUser_new_copy2
+        ( empNumber,userName,tradeAreaId,tradeAreaName,createTime,entryTime,deptId,
+        deptName,jobId,jobName,licensedPharmacist,chronicDiseaseSpe,maintainSpe,dayAvgSales,
+        addUpSales,shopRanking,historySalesData,actualAttendanceDay,attendanceRate,
+        age,education,major,pastTrainExe,nameSort,secretaryLing,ModificationDate,SAPID)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
-            #{item.userCode},
+            #{item.empNumber},
             #{item.userName},
+            #{item.tradeAreaId},
+            #{item.tradeAreaName},
+            #{item.createTime},
+            #{item.entryTime},
+            #{item.deptId},
             #{item.deptName},
-            #{item.pingying}
-
+            #{item.jobId},
+            #{item.jobName},
+            #{item.licensedPharmacist},
+            #{item.chronicDiseaseSpe},
+            #{item.maintainSpe},
+            #{item.dayAvgSales},
+            #{item.addUpSales},
+            #{item.shopRanking},
+            #{item.historySalesData},
+            #{item.actualAttendanceDay},
+            #{item.attendanceRate},
+            #{item.age},
+            #{item.education},
+            #{item.major},
+            #{item.pastTrainExe},
+            #{item.nameSort},
+            #{item.secretaryLing},
+            #{item.ModificationDate},
+            #{item.SAPID}
             )
         </foreach>
     </insert>

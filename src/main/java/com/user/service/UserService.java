@@ -25,10 +25,34 @@ public class UserService {
     public List<User> updateNew() {
         List<User> userList = userDao.updateNew();
         for (int i = 0; i<userList.size();i++){
+            userList.get(i).setEmpNumber(userList.get(i).getEmpNumber());
             userList.get(i).setUserName(userList.get(i).getUserName());
-            userList.get(i).setUserCode(userList.get(i).getUserCode());
             userList.get(i).setDeptName(userList.get(i).getDeptName());
-            userList.get(i).setPingying(getPingYin(userList.get(i).getUserName()));
+            userList.get(i).setTradeAreaId(userList.get(i).getTradeAreaId());
+            userList.get(i).setTradeAreaName(userList.get(i).getTradeAreaName());
+            userList.get(i).setCreateTime(userList.get(i).getCreateTime());
+            userList.get(i).setEntryTime(userList.get(i).getEntryTime());
+            userList.get(i).setDeptId(userList.get(i).getDeptId());
+            userList.get(i).setDeptName(userList.get(i).getDeptName());
+            userList.get(i).setJobId(userList.get(i).getJobId());
+            userList.get(i).setJobName(userList.get(i).getJobName());
+            userList.get(i).setLicensedPharmacist(userList.get(i).getLicensedPharmacist());
+            userList.get(i).setChronicDiseaseSpe(userList.get(i).getChronicDiseaseSpe());
+            userList.get(i).setMaintainSpe(userList.get(i).getMaintainSpe());
+            userList.get(i).setDayAvgSales(userList.get(i).getDayAvgSales());
+            userList.get(i).setAddUpSales(userList.get(i).getAddUpSales());
+            userList.get(i).setShopRanking(userList.get(i).getShopRanking());
+            userList.get(i).setHistorySalesData(userList.get(i).getHistorySalesData());
+            userList.get(i).setActualAttendanceDay(userList.get(i).getActualAttendanceDay());
+            userList.get(i).setAttendanceRate(userList.get(i).getAttendanceRate());
+            userList.get(i).setAge(userList.get(i).getAge());
+            userList.get(i).setEducation(userList.get(i).getEducation());
+            userList.get(i).setMajor(userList.get(i).getMajor());
+            userList.get(i).setPastTrainExe(userList.get(i).getPastTrainExe());
+            userList.get(i).setNameSort(getPingYin(userList.get(i).getUserName()));
+            userList.get(i).setSecretaryLing(userList.get(i).getSecretaryLing());
+            userList.get(i).setModificationDate(userList.get(i).getModificationDate());
+            userList.get(i).setSAPID(userList.get(i).getSAPID());
         }
         int count  = userDao.plInset(userList);
         if (count > 0){
